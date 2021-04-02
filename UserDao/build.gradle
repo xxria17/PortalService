@@ -8,12 +8,17 @@ version '1.0-SNAPSHOT'
 repositories {
     mavenCentral()
 }
-
+ext {
+    springVersion = '5.3.5'
+}
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     runtimeOnly 'mysql:mysql-connector-java:8.0.23'
     testImplementation 'org.hamcrest:hamcrest:2.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    implementation "org.springframework:spring-core:${springVersion}"
+    implementation "org.springframework:spring-context:${springVersion}"
+    implementation "org.springframework:spring-jdbc:${springVersion}"
 }
 
 test {

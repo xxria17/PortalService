@@ -1,65 +1,153 @@
 package kr.ac.jejunu;
 
+import javax.sql.DataSource;
 import java.sql.*;
 
 public class UserDao {
-    private final ConnectionMaker connectionMaker;
+    private final DataSource dataSource;
 
-    public UserDao(ConnectionMaker connectionMaker) {
-        this.connectionMaker = connectionMaker;
+    public UserDao(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
-    public User findById(Integer id) throws ClassNotFoundException, SQLException {
+    public User findById(Integer id) throws SQLException {
         //데이터 Mysql 연결
-        Connection connection = connectionMaker.getConnection();
+        Connection connection = null;
+        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
+        User user = null;
+        try {
+            connection = dataSource.getConnection();
 
-        PreparedStatement preparedStatement = connection.prepareStatement(
-                "select * from userinfo where id = ?"
-        );
-        preparedStatement.setInt(1, id);
+            preparedStatement = connection.prepareStatement(
+                    "select * from userinfo where id = ?"
+            );
+            preparedStatement.setInt(1, id);
 
-        ResultSet resultSet = preparedStatement.executeQuery();
-        resultSet.next();
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setName(resultSet.getString("name"));
+                user.setPassword(resultSet.getString("password"));
+            }
 
-        User user = new User();
-        user.setId(resultSet.getInt("id"));
-        user.setName(resultSet.getString("name"));
-        user.setPassword(resultSet.getString("password"));
-
-        resultSet.close();
-        preparedStatement.close();
-        connection.close();
+        } finally {
+            try {
+                resultSet.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                preparedStatement.close();
+            } catch (Exception throwables) {
+                throwables.printStackTrace();
+            }
+            try {
+                connection.close();
+            } catch (Exception throwables) {
+                throwables.printStackTrace();
+            }
+        }
 
         return user;
     }
 
     public Connection getConnection() throws ClassNotFoundException, SQLException {
-
-        return connectionMaker.getConnection();
+        return dataSource.getConnection();
     }
 
 
 
-    public void insert(User user) throws SQLException, ClassNotFoundException {
+    public void insert(User user) throws SQLException {
         //데이터 Mysql 연결
-        Connection connection = connectionMaker.getConnection();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = dataSource.getConnection();
 
-        PreparedStatement preparedStatement = connection.prepareStatement(
-                "insert into userinfo (name, password) values (?, ?)"
-                , Statement.RETURN_GENERATED_KEYS
-        );
-        preparedStatement.setString(1, user.getName());
-        preparedStatement.setString(2, user.getPassword());
+            preparedStatement = connection.prepareStatement(
+                    "insert into userinfo (name, password) values (?, ?)"
+                    , Statement.RETURN_GENERATED_KEYS
+            );
+            preparedStatement.setString(1, user.getName());
+            preparedStatement.setString(2, user.getPassword());
 
-        preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
 
-        ResultSet resultSet = preparedStatement.getGeneratedKeys();
-        resultSet.next();
-        user.setId(resultSet.getInt(1));
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            resultSet.next();
+            user.setId(resultSet.getInt(1));
+        } finally {
+            try {
+                preparedStatement.close();
+            } catch (Exception throwables) {
+                throwables.printStackTrace();
+            }
+            try {
+                connection.close();
+            } catch (Exception throwables) {
+                throwables.printStackTrace();
+            }
+        }
+    }
 
+    public void update(User user) throws SQLException {
+        //데이터 Mysql 연결
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = dataSource.getConnection();
 
-        preparedStatement.close();
-        connection.close();
+            preparedStatement = connection.prepareStatement(
+                    "update userinfo set name = ?, password = ? where id = ?"
+                    , Statement.RETURN_GENERATED_KEYS
+            );
+            preparedStatement.setString(1, user.getName());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setInt(3, user.getId());
 
+            preparedStatement.executeUpdate();
+
+        } finally {
+            try {
+                preparedStatement.close();
+            } catch (Exception throwables) {
+                throwables.printStackTrace();
+            }
+            try {
+                connection.close();
+            } catch (Exception throwables) {
+                throwables.printStackTrace();
+            }
+        }
+    }
+
+    public void delete(Integer id) throws SQLException {
+        //데이터 Mysql 연결
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = dataSource.getConnection();
+
+            preparedStatement = connection.prepareStatement(
+                    "delete from userinfo where id = ?"
+            );
+
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+
+        } finally {
+            try {
+                preparedStatement.close();
+            } catch (Exception throwables) {
+                throwables.printStackTrace();
+            }
+            try {
+                connection.close();
+            } catch (Exception throwables) {
+                throwables.printStackTrace();
+            }
+        }
     }
 }
