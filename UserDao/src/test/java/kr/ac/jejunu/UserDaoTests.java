@@ -31,6 +31,7 @@ public class UserDaoTests {
         // DaoFactory daoFactory = new DaoFactory();
         // UserDao userDao = new UserDao(new JejuConnectionMaker());
         // UserDao userDao = daoFactory.getUserDao();
+
         User user = userDao.findById(id);
         assertThat(user.getId(), is(id));
         assertThat(user.getName(), is(name));
@@ -49,8 +50,8 @@ public class UserDaoTests {
 //        DaoFactory daoFactory = new DaoFactory();
 //        UserDao userDao = new UserDao(new JejuConnectionMaker());
 //        UserDao userDao = daoFactory.getUserDao();
-        userDao.insert(user);
 
+        userDao.insert(user);
         User insertedUser = userDao.findById(user.getId());
         assertThat(user.getId(), greaterThan(0));
         assertThat(insertedUser.getId(), is(user.getId()));
