@@ -24,6 +24,7 @@ public class UserServlet extends GenericServlet {
         response.append("</h1>");
         response.append("</body>");
         response.append("</html>");
+        res.setContentType("text/html;charset=UTF-8");
         res.getWriter().println(response.toString());
     }
 
