@@ -1,4 +1,4 @@
-package kr.ac.jejunu;
+package kr.ac.jejunu.user;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

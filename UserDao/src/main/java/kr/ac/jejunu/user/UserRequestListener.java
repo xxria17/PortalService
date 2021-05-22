@@ -1,4 +1,4 @@
-package kr.ac.jejunu;
+package kr.ac.jejunu.user;
 
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;

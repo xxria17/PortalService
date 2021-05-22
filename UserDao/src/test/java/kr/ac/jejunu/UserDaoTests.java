@@ -1,5 +1,7 @@
 package kr.ac.jejunu;
 
+import kr.ac.jejunu.user.User;
+import kr.ac.jejunu.user.UserDao;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;

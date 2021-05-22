@@ -1,4 +1,4 @@
-package kr.ac.jejunu;
+package kr.ac.jejunu.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
