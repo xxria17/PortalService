@@ -2,7 +2,7 @@
 <html>
 <body>
 <h1>
-    Hello! ${user.name} !!!
+    Error ${e.message} !!!
 </h1>
 </body>
 </html>
